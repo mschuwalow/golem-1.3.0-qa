@@ -1,0 +1,60 @@
+# Schema for IDEA:
+# $schema: https://schema.golem.cloud/app/golem/1.2.4/golem.schema.json
+# Schema for vscode-yaml
+# yaml-language-server: $schema=https://schema.golem.cloud/app/golem/1.2.4/golem.schema.json
+
+# See https://learn.golem.cloud/docs/app-manifest#field-reference for field reference
+# For creating APIs see https://learn.golem.cloud/invoke/making-custom-apis
+
+components:
+  golem-qa:weather:
+    template: ts
+
+# dependencies:
+#   golem-qa:weather:
+#     - type: wasm-rpc
+#       target: golem-qa:second
+
+# Example for adding dependencies for Worker to Worker communication:
+# See https://learn.golem.cloud/docs/app-manifest#fields_dependencies for more information
+#
+#dependencies:
+#  golem-qa:weather:
+#  - target: <target component name to be called>
+#    type: wasm-rpc
+
+ # Schema for IDEA:
+# $schema: https://schema.golem.cloud/app/golem/1.2.2-dev.1/golem.schema.json
+# Schema for vscode-yaml
+# yaml-language-server: $schema=https://schema.golem.cloud/app/golem/1.2.2-dev.1/golem.schema.json
+
+# See https://learn.golem.cloud/docs/app-manifest#field-reference for field reference
+
+httpApi:
+  definitions:
+    assistant-agent-test:
+      version: '6'
+      routes:
+      - method: POST
+        path: /v1/assistant
+        binding:
+          type: default
+          componentName: "golem-qa:weather"
+          response: |
+            let worker = instance("assistant-agent()");
+            worker.ask(request.body.location);
+            {status: 200}
+
+  deployments:
+    local:
+    - host: localhost:9006
+      definitions:
+      - assistant-agent-test
+
+  # Example for adding dependencies for Worker to Worker communication:
+# See https://learn.golem.cloud/docs/app-manifest#fields_dependencies for more information
+#
+#dependencies:
+#  golem:python-agent-test:
+#  - target: <target component name to be called>
+#    type: wasm-rpc

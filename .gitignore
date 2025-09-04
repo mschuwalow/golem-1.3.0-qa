@@ -1,0 +1,6 @@
+/dist
+/golem-temp
+/node_modules
+.generated
+.metadata
+.golem
